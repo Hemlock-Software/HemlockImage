@@ -7,6 +7,7 @@ def main():
         response = requests.post('http://localhost:42069/api/v1/upload', files={'file': img_file})
         
     if response.status_code == 200:
+        print('\a', end="")
         print("Upload successful. The image is available at the following URL:")
         print(response.json()['file_url'])
     else:
