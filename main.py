@@ -1,6 +1,7 @@
 import os
 import base64
 from flask import Flask, request, send_from_directory, jsonify
+from flask_cors import *
 from werkzeug.utils import secure_filename
 import filetype
 
@@ -8,10 +9,13 @@ VERSION = "0.1.0"
 ROOT_URL = "http://localhost:42069"
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
+
 
 @app.route("/")
 def index():
     return "HemlockImage Server<br>Version " + VERSION
+
 
 @app.route("/api/v1/upload", methods=['POST'])
 def upload():
@@ -32,9 +36,11 @@ def upload():
         else:
             return jsonify(error="Uploaded file is not an image"), 400
 
+
 @app.route('/images/<path:path>')
 def serve_image(path):
     return send_from_directory('static/images', path)
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=42069)
