@@ -6,6 +6,7 @@ import filetype
 
 VERSION = "0.1.0"
 ROOT_URL = "http://localhost:42069"
+ACCEPTED_EXTENSIONS = {"png", "jpg", "jpeg", "bmp", "gif", "webp", "svg", "ico"}
 
 app = Flask(__name__)
 
@@ -21,7 +22,7 @@ def upload():
     if file.filename == '':
         return jsonify(error="No selected file"), 400
     if file:
-        if filetype.is_image(file.stream.read(261)):
+        if filetype.is_image(file.stream.read(261)) and '.' in file.filename and file.filename.split('.')[-1] in ACCEPTED_EXTENSIONS:
             file.stream.seek(0)  # reset file pointer to the start after reading
             filename = secure_filename(file.filename)
             random_str = base64.urlsafe_b64encode(os.urandom(15)).decode('utf-8')
